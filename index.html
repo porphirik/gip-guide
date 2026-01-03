@@ -1,0 +1,846 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Справка по работе с геоинформационной платформой</title>
+    <script>
+      document.addEventListener('DOMContentLoaded', highlightMenuOnScroll);
+      document.addEventListener('DOMContentLoaded', scrollToIntroduction);
+      document.addEventListener('keyup', (event) => {
+        if (event.key === 'Escape') {
+          window.close();
+        }
+      });
+      document.addEventListener('DOMContentLoaded', () => {
+        const mainContainer = document.getElementById('guide-space-right');
+        mainContainer.focus();
+      });
+
+      function highlightMenuOnScroll() {
+        const container = document.getElementById('guide-space-right');
+        if (!container) return;
+        const sections = container.querySelectorAll('.window-content, .window-subcontent');
+        const sectionContent = container.querySelectorAll('.window-content');
+        const menuItems = document.querySelectorAll('.guide-left-nav-item');
+        const arrowItems = document.querySelectorAll('.headers');
+
+        container.addEventListener('scroll', () => {
+          let lastVisibleSection = '';
+          let lastVisibleSectionContent = '';
+          let lastArrowItems = '';
+
+          sections.forEach((section) => {
+            const sectionTop =
+              section.getBoundingClientRect().top - container.getBoundingClientRect().top;
+
+            if (sectionTop <= 60) {
+              lastVisibleSection = section.getAttribute('id');
+            }
+          });
+
+          sectionContent.forEach((section) => {
+            const sectionTop =
+              section.getBoundingClientRect().top - container.getBoundingClientRect().top;
+
+            if (sectionTop <= 60) {
+              lastVisibleSectionContent = section.getAttribute('id');
+            }
+          });
+
+          arrowItems.forEach((section) => {
+            const sectionTop =
+              section.getBoundingClientRect().top - container.getBoundingClientRect().top;
+
+            if (sectionTop <= 60) {
+              lastArrowItems = section.getAttribute('id');
+            }
+          });
+
+          menuItems.forEach((item) => {
+            item.classList.remove('active-documentation-scroll');
+            if (item.querySelector('a').getAttribute('href').includes(lastVisibleSection)) {
+              item.classList.add('active-documentation-scroll');
+              item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+            if (
+              item.querySelector('a').getAttribute('href').includes(lastVisibleSectionContent)
+            ) {
+              const listItems = document.getElementById(lastArrowItems);
+              if (listItems != null) {
+                listItems.style.display = 'block';
+              }
+            }
+          });
+        });
+      }
+
+      function scrollToIntroduction() {
+        const introductionSection = document.getElementById('introduction');
+
+        if (introductionSection) {
+          introductionSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      function scrollToChapter(chapterId) {
+        const container = document.getElementById('guide-space-right');
+        const chapter = document.getElementById(chapterId);
+
+        if (chapter) {
+          const containerTop = container.getBoundingClientRect().top;
+          const chapterTop = chapter.getBoundingClientRect().top;
+          const scrollOffset = chapterTop - containerTop + container.scrollTop;
+
+          container.scrollTo({
+            top: scrollOffset,
+            behavior: 'smooth',
+          });
+        }
+      }
+
+      function turnOnList(chapterId, buttonId) {
+        let element = document.getElementById(chapterId);
+        let button = document.getElementById(buttonId);
+        if (element.style.display === 'none') {
+          element.style.display = 'block';
+        } else {
+          element.style.display = 'none';
+        }
+      }
+    </script>
+    <style>
+      html {
+        width: 100%;
+        height: 100%;
+      }
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+        background-color: white;
+        color: #444;
+        font-family: sans-serif;
+        font-size: 16px;
+        text-decoration: none;
+        overflow: hidden;
+      }
+      li {
+        list-style-type: none;
+      }
+      a {
+        text-decoration: none;
+        color: #444;
+      }
+      .headers {
+        display: block;
+        font-size: 2em;
+        margin-block-start: 0.67em;
+        margin-block-end: 0.67em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        font-weight: bold;
+      }
+      .guide-window {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        padding: 5px 0px;
+        box-sizing: border-box;
+      }
+      .guide-left-nav {
+        min-width: 270px;
+        max-width: 270px;
+        height: 100%;
+        background-color: rgb(245, 245, 245);
+        border-radius: 10px 0 0 10px;
+        overflow-y: scroll;
+        user-select: none;
+      }
+      .guide-left-nav ul {
+        margin: 0px;
+        padding: 0px;
+      }
+      .guide-nav-wrapper {
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      .guide-left-nav-item {
+        padding: 10px;
+        padding-left: 15px;
+        transition: 0.2s ease-out;
+        cursor: pointer;
+      }
+      .guide-left-nav-item:hover {
+        color: white;
+        background-color: #9593d9;
+        border-radius: 10px;
+      }
+      .guide-left-nav-item:hover a {
+        color: white;
+      }
+      .guide-left-nav-item:active,
+      .active-documentation {
+        color: white;
+        background-color: #52517d;
+      }
+      .active-documentation-scroll {
+        background-color: #9593d9;
+        color: white;
+      }
+      .guide-nav-depth-1 {
+        padding-left: 30px;
+        font-size: 14px;
+      }
+      .guide-space-right {
+        width: 100%;
+        height: 100%;
+        padding: 0px 10px 0px 20px;
+        overflow-y: scroll;
+        overflow-x: scroll;
+      }
+      .guide-space-right:focus {
+        outline: none;
+      }
+      .introduction {
+        padding-top: 5px;
+      }
+      .guide-left-nav::-webkit-scrollbar,
+      .guide-space-right::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+        scroll-behavior: smooth;
+      }
+      .guide-left-nav::-webkit-scrollbar-corner,
+      .guide-space-right::-webkit-scrollbar-corner {
+        background-color: #444;
+      }
+      .guide-left-nav::-webkit-scrollbar-thumb,
+      .guide-space-right::-webkit-scrollbar-thumb {
+        box-shadow: inset 0 0 6px #9593d9;
+        border-radius: 10px;
+      }
+      .guide-left-nav::-webkit-scrollbar-track,
+      .guide-space-right::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px rgb(151 151 151 / 30%);
+        border-radius: 10px;
+      }
+      .element-with-list {
+        display: inline-flex;
+      }
+      .list-subcontent {
+        margin-top: 10px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="guide-window">
+      <div class="guide-left-nav">
+        <nav class="guide-nav-wrapper">
+          <nav
+            id="getting-started"
+            onclick="scrollToChapter('introduction')"
+            class="guide-left-nav-item depth-0"
+          >
+            <a href="#introduction" tabindex="2" onclick="event.preventDefault()"> Введение </a>
+          </nav>
+          <div class="element-with-list">
+            <nav
+              id="instruments-guide"
+              onclick="scrollToChapter('instruments-guide-contents')"
+              class="guide-left-nav-item depth-0"
+            >
+              <a href="#instruments-guide-contents" tabindex="2"> Работа с инструментами </a>
+            </nav>
+            <span
+              id="instruments-guide-button"
+              class="list-subcontent"
+              onclick="turnOnList('instruments-guide-list', 'instruments-guide-button')"
+            >
+              &#9660
+            </span>
+          </div>
+
+          <ul id="instruments-guide-list" style="display: none">
+            <li
+              id="linear-instruments-guide"
+              onclick="scrollToChapter('linear')"
+              class="guide-left-nav-item guide-nav-depth-1"
+            >
+              <a href="#linear" tabindex="2" onclick="event.preventDefault()">
+                Площадные и линейные измерения
+              </a>
+            </li>
+            <li
+              id="points-instruments-guide"
+              onclick="scrollToChapter('points')"
+              class="guide-left-nav-item guide-nav-depth-1"
+            >
+              <a href="#points" tabindex="2" onclick="event.preventDefault()">Нанесение точек </a>
+            </li>
+            <li
+              id="heights-instruments-guide"
+              onclick="scrollToChapter('heights')"
+              class="guide-left-nav-item guide-nav-depth-1"
+            >
+              <a href="#heights" tabindex="2" onclick="event.preventDefault()">
+                Профиль высот с генерализацией
+              </a>
+            </li>
+            <li
+              id="flood-instruments-guide"
+              onclick="scrollToChapter('flood')"
+              class="guide-left-nav-item guide-nav-depth-1"
+            >
+              <a href="#flood" tabindex="2" onclick="event.preventDefault()">
+                Визуальный анализ зоны затопления
+              </a>
+            </li>
+            <li
+              id="excess-instruments-guide"
+              onclick="scrollToChapter('excess')"
+              class="guide-left-nav-item guide-nav-depth-1"
+            >
+              <a href="#excess" tabindex="2" onclick="event.preventDefault()">
+                Дистанция-превышение
+              </a>
+            </li>
+            <li
+              id="view-from-instruments-guide"
+              onclick="scrollToChapter('view-from')"
+              class="guide-left-nav-item guide-nav-depth-1"
+            >
+              <a href="#view-from" tabindex="2" onclick="event.preventDefault()"> Вид из точки </a>
+            </li>
+            <li
+              id="circle-flight-instruments-guide"
+              onclick="scrollToChapter('circle-flight')"
+              class="guide-left-nav-item guide-nav-depth-1"
+            >
+              <a href="#circle-flight" tabindex="2" onclick="event.preventDefault()">
+                Круговой облет
+              </a>
+            </li>
+            <li
+              id="levels-instruments-guide"
+              onclick="scrollToChapter('levels')"
+              class="guide-left-nav-item guide-nav-depth-1"
+            >
+              <a href="#levels" tabindex="2" onclick="event.preventDefault()">
+                Отмывка рельефа и линии уровней
+              </a>
+            </li>
+            <li
+              id="screenshot-instruments-guide"
+              onclick="scrollToChapter('screenshot')"
+              class="guide-left-nav-item guide-nav-depth-1"
+            >
+              <a href="#screenshot" tabindex="2" onclick="event.preventDefault()">
+                Снимок рабочей зоны
+              </a>
+            </li>
+            <li
+              id="plane-instruments-guide"
+              class="guide-left-nav-item guide-nav-depth-1"
+              onclick="scrollToChapter('plane')"
+            >
+              <a href="#plane">Полет БПЛА</a>
+            </li>
+          </ul>
+          <div class="element-with-list">
+            <nav
+              id="layers-guide"
+              onclick="scrollToChapter('work-for-layers-guide-contents')"
+              class="guide-left-nav-item depth-0"
+            >
+              <a href="#work-for-layers-guide-contents" tabindex="2" onclick="event.preventDefault()">
+                Работа со слоями
+              </a>
+            </nav>
+            <span
+              id="layers-guide-button"
+              class="list-subcontent"
+              onclick="turnOnList('layers-guide-list', 'layers-guide-button')"
+            >
+              &#9660
+            </span>
+          </div>
+
+          <ul id="layers-guide-list" style="display: none">
+            <li
+              id="see-layers-guide"
+              onclick="scrollToChapter('see-layers')"
+              class="guide-left-nav-item guide-nav-depth-1"
+            >
+              <a href="#see-layers" tabindex="2" onclick="event.preventDefault()">
+                Просмотр слоев
+              </a>
+            </li>
+            <li
+              id="new-layers-guide"
+              onclick="scrollToChapter('new-layers')"
+              class="guide-left-nav-item guide-nav-depth-1"
+            >
+              <a href="#new-layers" tabindex="2" onclick="event.preventDefault()">
+                Добавление новых слоев
+              </a>
+            </li>
+          </ul>
+          <div class="element-with-list">
+            <nav
+              id="project-guide"
+              onclick="scrollToChapter('projects-guide-contents')"
+              class="guide-left-nav-item depth-0"
+            >
+              <a href="#projects-guide-contents" tabindex="2" onclick="event.preventDefault()">
+                Работа с проектами
+              </a>
+            </nav>
+            <span
+              id="project-guide-button"
+              class="list-subcontent"
+              onclick="turnOnList('project-guide-list', 'project-guide-button')"
+            >
+              &#9660
+            </span>
+          </div>
+
+          <ul id="project-guide-list" style="display: none">
+            <li
+              id="create-project-guide"
+              onclick="scrollToChapter('create-project')"
+              class="guide-left-nav-item guide-nav-depth-1"
+            >
+              <a href="#create-project" tabindex="2" onclick="event.preventDefault()">
+                Создание нового проекта
+              </a>
+            </li>
+            <li
+              id="edit-project-guide"
+              onclick="scrollToChapter('edit-project')"
+              class="guide-left-nav-item guide-nav-depth-1"
+            >
+              <a href="#edit-project" tabindex="2" onclick="event.preventDefault()">
+                Редактирование существующего проекта
+              </a>
+            </li>
+          </ul>
+          <nav
+            id="base-layers-guide"
+            onclick="scrollToChapter('base-layers-guide-contents')"
+            class="guide-left-nav-item depth-0"
+          >
+            <a href="#base-layers-guide-contents" tabindex="2" onclick="event.preventDefault()">
+              Базовые слои
+            </a>
+          </nav>
+          <nav
+            id="settings-guide"
+            onclick="scrollToChapter('settings-guide-contents')"
+            class="guide-left-nav-item depth-0"
+          >
+            <a href="#settings-guide-contents" tabindex="2" onclick="event.preventDefault()">
+              Настройки карты
+            </a>
+          </nav>
+          <nav
+            id="search-guide"
+            onclick="scrollToChapter('search-guide-contents')"
+            class="guide-left-nav-item depth-0"
+          >
+            <a href="#search-guide-contents" tabindex="2" onclick="event.preventDefault()">
+              Поиск городов и координат
+            </a>
+          </nav>
+          <nav
+            id="satellite-guide"
+            onclick="scrollToChapter('satellite-guide-contents')"
+            class="guide-left-nav-item depth-0"
+          >
+            <a href="#satellite-guide-contents" tabindex="2" onclick="event.preventDefault()">
+              Каталог архива предприятия
+            </a>
+          </nav>
+        </nav>
+      </div>
+      <div id="guide-space-right" class="guide-space-right" tabindex="1">
+        <div id="introduction" class="window-content" style="display: block">
+          <span class="headers" class="headers" style="padding-top: 10px">Введение</span>
+          <p>
+            Геоинформационная WEB-платформа предназначенна для целей 3D-визуализации разнородных геоинформационных данных, проведения расчетов по ним с использованием инструментария платформы и наглядной демонстрации полученных результатов.
+          </p>
+          <p style="font-size: 18px; font-weight: 600">Основные возможности:</p>
+          <p>
+            - Клиент-серверная архитектура <br />
+            - Использование WMTS-серверов для получения и отображения растровых слоев
+            <br />
+            - Отображение 3D-моделей и векторных слоев в 3D-режиме <br />
+            - Работа как в гостевом режиме, так и в личном кабинете пользователя
+            <br />
+            - Организация данных по проектам <br />
+            - Базовый расчетный функционал <br />
+            - Работа под ОС AstraLinux 1.6, 1.7
+          </p>
+          <img src="./assets/overview.png" style="width: 85%; height: auto" />
+          <p style="font-size: 18px; font-weight: 600">Функционал комплекса:</p>
+          <p>
+            Основными элементами комплекса выступают модули просмотра проектов и продукции, работы
+            со слоями, выбора системы координат, панели инструментов, а также поиска спутниковых
+            снимков и их нанесение на глобус.
+          </p>
+        </div>
+        <div id="instruments-guide-contents" class="window-content">
+          <span id="instruments-guide-list" class="headers" class="headers">Работа с инструментами</span>
+          <h3>
+            <a id="linear" class="window-subcontent">Площадные и линейные измерения</a>
+          </h3>
+          <p>
+            Для того, чтобы начать работу с инструментом "Линейные измерения", необходимо выбрать
+            соответствующий инструмент в панели инструментов, расположенной справа. Далее необходимо
+            отметить начальную точку для измерений на карте при помощи клика левой кнопкой мыши на
+            нужном участке. Затем установить конечную точку кликом правой клавишей мыши.
+          </p>
+          <img src="./assets/linear.png" style="width: 85%; height: auto" />
+          <p>
+            Измеренное расстояние появится на экране рядом с линией.
+            <br /><br />
+            Для того, чтобы начать работу с инструментом "Площадные измерения", необходимо выбрать
+            соответствующий инструмент в панели инструментов, расположенной справа. Далее необходимо
+            отметить начальную точку для измерений на карте при помощи клика левой кнопкой мыши на
+            нужном участке. Затем аналогичным образом установить последующие точки и завершить
+            установку точек кликом правой клавишей мыши.
+          </p>
+          <h3><a id="points" class="window-subcontent">Нанесение точек</a></h3>
+          <p>
+            Начало работы с инструментом "Добавить точку" состоит в выборе соответствующего
+            инструмента в правом инструментальном меню с последущим кликом левой кнопкой мыши в
+            интересующей точке.
+          </p>
+          <img src="./assets/points.png" style="width: 85%; height: auto" />
+          <p>
+            После нанесения точки на глобус, рядом с ней появится информация с координатами и
+            высотой.
+            <br />
+          </p>
+          <h3>
+            <a id="heights" class="window-subcontent">Профиль высот с генерализацией</a>
+          </h3>
+          <p>
+            Для получения профиля высот необходимо выбрать инструмент "Профиль высот" и провести
+            линию на рабочей поверхности. В случае успеха внизу экрана появится гистограмма,
+            отображающая профиль высот.
+          </p>
+          <img src="./assets/heights.png" style="width: 85%; height: auto" />
+          <p>
+            Кроме того, для начала работы с данным инструментом необходимо установить только
+            начальную точку в рабочей области, конечная точка может варьироваться, таким образом,
+            профиль высот будет изменяться динамически.
+            <br />
+          </p>
+          <h3>
+            <a id="flood" class="window-subcontent">Визуальный анализ зоны затопления</a>
+          </h3>
+          <p>
+            Инструмент "Анализ зон затопления" предназначен для случаев, когда необходимо оценить,
+            какие районы могут оказаться в зоне риска затопления при ЧС различного характера.
+          </p>
+          <img src="./assets/flooding.png" style="width: 85%; height: auto" />
+          <p>
+            Чтобы провести анализ возможных зон затопления, необходимо выделить интересующий участок
+            местности, а затем указать начальный уровень воды в окне, которое автоматически
+            появляется в верхнем правом углу экрана. С помощью слайдера можно производить
+            регулирование уровня воды в большую сторону от начального уровня.
+            <br />
+          </p>
+          <h3>
+            <a id="excess" class="window-subcontent">Дистанция-превышение</a>
+          </h3>
+          <p>
+            Инструмент "Дистанция-превышение" предназначен для определения перепада высот на прямом
+            отрезке пути.
+          </p>
+          <img src="./assets/excess.png" style="width: 85%; height: auto" />
+          <h3><a id="view-from" class="window-subcontent">Вид из точки</a></h3>
+          <p>
+            С помощью данного инструмента можно просмотреть вид из конкретной точки в определенном
+            направлении. Так, для начала работы с данным инструментом необходимо выбрать точку путем
+            клика левой кнопкой мыши, а затем направить курсор в нужном направлении, кликнув ЛКМ для
+            его фиксирования. Далее произойдет автоматическое изменение перспективы камеры в рабочей
+            зоне.
+          </p>
+          <h3>
+            <a id="circle-flight" class="window-subcontent">Круговой облет</a>
+          </h3>
+          <p>Инструмент "Круговой облет" предназначен для облета конкретной выбранной точки.</p>
+          <br />
+          Для начала работы с данным инструментом необходимо выбрать точку, вокруг которой камера
+          будет совершать вращение, осуществляемое против часовой стрелки на определенной высоте.
+
+          <h3>
+            <a id="levels" class="window-subcontent">Отмывка рельефа и линии уровней</a>
+          </h3>
+          <p>
+            Данный инструмент предназначен для визуализации отмывки рельефа и построения линий
+            уровня. Он позволяет гибко настраивать параметры, такие как дапазон высот для отмывки,
+            интервал, толщину и цвет линий уровней, а также прозрачность слоя.
+          </p>
+          <img src="./assets/levels.png" style="width: 35%; height: auto" />
+          <h3>
+            <a id="screenshot" class="window-subcontent">Снимок рабочей зоны</a>
+          </h3>
+          <p>Инструмент "Сделать снимок экрана" расположен на верхней панели инструментов.</p>
+          <img src="./assets/screenshot.png" style="width: 85%; height: auto" />
+          <p>
+            По умолчанию снимок экрана сохраняется в папку "Загрузки" в формате PNG.
+            <br />
+          </p>
+          <h3>
+            <a id="plane" class="window-subcontent">Полет БПЛА</a>
+          </h3>
+          <p>
+            <strong>Добавление параметров, необходимых для работы функции</strong>
+          </p>
+          <p>
+            Доступ к функции полета БПЛА для пользователя находится справа окна приложения в панели
+            инструментов.
+          </p>
+          <div style="text-align: center">
+            <img src="./assets/plane1.jpg" style="width: 5%; height: auto" alt="plane-button" />
+          </div>
+          <p>
+            При нажатии на иконку самолета появится модальное окно, а курсор мыши перейдет в режим
+            добавления точек. Нажатием левой кнопки мыши пользователь может добавлять неограниченное
+            количество точек для полета, конечная точка задается нажатием правой кнопки мыши. После
+            добавления последней точки у пользователя на экране появятся векторы на поверхности
+            земли между теми точками, которые он задал. Далее пользователю необходимо задать в
+            модальном окне параметры высоты полета и скорости полета. Высота полета БПЛА
+            отсчитывается от поверхности земли и задается в метрах, скорость задается в км / ч.
+          </p>
+          <div style="text-align: center">
+            <img src="./assets/plane2.png" style="width: 40%; height: auto" alt="fly-params" />
+          </div>
+          <p><strong>Запуск функции</strong></p>
+          <p>
+            Запуск функции возможно осуществить только после добавления минимум двух точек на карте
+            и ввода параметров высоты полета и скорости полета. После ввода всех данных пользователю
+            необходимо нажать кнопку «Полетели!». После нажатия данной кнопки у пользователя на
+            экране появится дублирующая (зеленая) линия на заданной высоте, которая полностью
+            дублирует заданные на поверхности земли точки. Появится дублирующая (желтая) плавная
+            линия, которая показывает плавный путь полета БПЛА, и появится сама модель БПЛА, которая
+            автоматически начнет полет по плавной (желтой) линии через заданные точки.
+          </p>
+          <div style="text-align: center">
+            <img src="./assets/plane3.jpg" style="width: 65%; height: auto" alt="route" />
+          </div>
+          <p><strong>Выходные данные полета</strong></p>
+          <p>
+            После начала полета БПЛА у пользователя раскроется дополнительное модальное окно,
+            которое будет выводить параметры полета, такие как: общая дистанция, время полета в
+            секундах, расстояние от БПЛА до поверхности рельефа.
+          </p>
+          <div style="text-align: center">
+            <img src="./assets/plane4.png" style="width: 40%; height: auto" alt="fly-params-full" />
+          </div>
+          <p>
+            Если данные рельефа у пользователя отключены, то в соответствующем окне пользователь
+            будет постоянно видеть ту высоту, которую он задал. Если же данные рельефа включены для
+            отображения, тогда в окне пользователь будет видеть корректное расстояние от БПЛА до
+            верхней точки рельефа.
+          </p>
+          <p>
+            Общая дистанция высчитывается путем сложения длины всех векторов между точками, которые
+            задал пользователь. Так же на основной линии, на поверхности земли, можно посмотреть
+            расстояние между каждым отдельно взятым вектором.
+          </p>
+          <div style="text-align: center">
+            <img src="./assets/plane6.png" style="width: 65%; height: auto" alt="fly-params-full" />
+          </div>
+          <p><strong>Дополнительные функции</strong></p>
+          <p>
+            Пользователю доступна функция play / pause. При нажатии на иконку «Pause» БПЛА прекратит
+            свое движение. При нажатии на иконку «Play» БПЛА начнет свой полет с того же места, в
+            котором он был остановлен.
+          </p>
+          <p>
+            Повторное нажатие кнопки «Полетели!» приведет к тому, что БПЛА начнет свой полет с
+            самого начала, сохранив все изначально заданные параметры полета и точки.
+          </p>
+          <p>
+            В функционал модального окна добавлена кнопка «свернуть»
+            <img src="./assets/_X.png" style="width: 5%; height: auto" alt="buttons" />
+            , при нажатии на которую все параметры полета станут скрыты для минимизации визуального
+            шума. Доступны останутся только кнопка «свернуть/закрыть (окно)», «полетели!» и
+            «play/pause».
+          </p>
+          <div style="text-align: center">
+            <img src="./assets/playpause.png" style="width: 45%; height: auto" alt="buttons" />
+          </div>
+          <p>Повторное нажатие на кнопку позволит обратно раскрыть параметры полета.</p>
+          <p>
+            Функция автоматического наведения камеры на БПЛА становиться доступна пользователю сразу
+            после начала полета. Появляется модальное окно с надписью «Фиксация камеры на самолет».
+            Слева от надписи находится иконка камеры, при нажатии на которую, камера автоматически
+            привяжется и начнет следовать за БПЛА.
+          </p>
+          <div style="text-align: center">
+            <img src="./assets/camerafix.jpg" style="width: 45%; height: auto" alt="buttons" />
+          </div>
+          <p>
+            Данная функция создана для удобства слежения за объектом полета. Круговой обзор будет
+            осуществляться с помощью левой кнопки мыши, приближение и отдаление – с помощью колесика
+            мыши.
+          </p>
+          <p>
+            Функция полного закрытия модального окна управления БПЛА при нажатии на "х"
+            <img src="./assets/_X.png" style="width: 5%; height: auto" alt="buttons" />
+            в правом верхнем углу модального окна. Данная функция реализована, чтобы пользователь
+            мог сделать снимок экрана без посторонних элементов. Окно можно открыть обратно, нажав
+            левой кнопкой мыши на БПЛА.
+          </p>
+        </div>
+        <div id="work-for-layers-guide-contents" class="window-content">
+          <span id="layers-guide-list" class="headers" class="headers">Работа со слоями</span>
+          <h3>
+            <a id="see-layers" class="window-subcontent">Просмотр слоев</a>
+          </h3>
+          <p>
+            В левом боковом меню расположен список проектов, при нажатии на каждый из которых
+            открывается список слоев, привязанных к конкретному проекту.
+          </p>
+          <img src="./assets/layers1.png" style="width: 85%; height: auto" />
+          <p>
+            Все слои разделены на 4 основные категории: растровые слои, векторные слои, 3D-модели и
+            рельеф. Для растровых слоев доступны такие опции, как включение/выключение слоя,
+            управлению прозрачностью конкретного слоя, включение/выключение режима шторки, а также
+            перелет к слою.
+          </p>
+          <br />
+          Для векторных слоев также доступна опция "Отобразить с высотой".
+          <h3>
+            <a id="new-layers" class="window-subcontent">Добавление новых слоев</a>
+          </h3>
+          <p>
+            Добавление новых слоев в существующий проект производится через меню "Проекты" и
+            редактирование нужного проекта (см. раздел "Работа с проектами").
+          </p>
+        </div>
+        <div id="projects-guide-contents" class="window-content">
+          <span id="project-guide-list" class="headers" class="headers">Работа с проектами</span>
+          <h3>
+            <a id="create-project" class="window-subcontent">Создание нового проекта</a>
+          </h3>
+          <p>
+            Для создания нового проекта необходимо перейти в меню "Проекты" и кликнуть левой кнопкой
+            мыши по кнопке "Создать новый проект". В открывшемся меню можно указать название
+            проекта, а также его описание.
+          </p>
+          <h3>
+            <a id="edit-project" class="window-subcontent">Редактирование существующего проекта</a>
+          </h3>
+          <p>
+            Для начала редактирования уже существующего проекта необходимо перейти во вкладку
+            "Проекты" и нажать кнопку "Редактирование проекта" напротив нужного названия. Далее
+            откроется меню редактирования проекта, в котором для изменений доступны следующие
+            данные:
+          </p>
+          <p>- Имя проекта</p>
+          <p>
+            - Добавить <strong>растровые данные</strong> через указание URL сервера раздающего тайлы
+            в формате WMTS. Так же доступно отображение семантики для растровых данных полученных
+            через веб сервис Panorama. Для удобства добавления растровых данных, серверу раздающему
+            тайлы задаётся псевдоним, благодаря чему нет необходимости каждый раз заново писать URL.
+          </p>
+          <p>
+            - Добавить <strong>векторные данные</strong> через указание пути до слоя на сервере и
+            присваивание ему нового имени. Изменить векторные данные можно при помощи клика на
+            соответствующее название. Таким образом, можно изменить имя слоя, путь до слоя, тип,
+            высоту и классификатор. Кроме того, можно удалить необходимые данные при помощи клика по
+            кнопке "Удалить".
+          </p>
+          <img
+            src="./assets/rasterVector.png"
+            style="width: 85%; height: auto; display: block; margin: auto"
+          />
+          <p>
+            - Добавить <strong>3D-модели</strong> через указание пути до слоя на сервере и
+            присваивание ему нового имени. Изменить путь до слоя 3D-модели и его имя можно при
+            помощи клика на соответствующее название.
+          </p>
+          <img src="./assets/existing-project-editing.png" style="width: 85%; height: auto" />
+          <p>- Добавить <strong>рельеф</strong> можно несколькими способами:</p>
+          <p>1. Указать путь до слоя хранящегося локально на сервере</p>
+          <p>2. Указать url внешнего сервера с описанием слоя в виде layer.json</p>
+          <p>3. Указать путь до geobirserver-a для получения рельефа из формата bir в виде hmp</p>
+          <img
+            src="./assets/terrainAdd.PNG"
+            style="width: 85%; height: auto; display: block; margin: auto"
+          />
+        </div>
+        <div id="base-layers-guide-contents" class="window-content">
+          <span class="headers">Базовые слои</span>
+          <p>
+            Инструмент выбора базового слоя и рельефа позволяет пользователям переключаться между
+            глобальными базовыми слоями, а также выбирать текущий глобальную модель рельефа из
+            перечня доступных. Настройка и подключение базовых растровых слоев и моделей рельефа
+            выполняются администратором системы с помощью инструмента администрирования.
+          </p>
+          <img src="./assets/baseLayers.png" style="width: 35%; height: auto" />
+        </div>
+        <div id="settings-guide-contents" class="window-content">
+          <span class="headers">Настройки</span>
+          <p>
+            Настройки карты позволяют управлять отображением и настройками видимости настроенных
+            администратором дополнительных слоев, наносимых поверх всех остальных слоев, а так же
+            номенклатурной и тайловой сетки. Кроме того, данное меню позволяет осуществить
+            визуализацию пролета космического аппарата Русурс-П в момент съемки в демо-режиме.
+          </p>
+          <img src="./assets/settings_map.png" style="width: 35%; height: auto" />
+        </div>
+        <div id="search-guide-contents" class="window-content">
+          <span class="headers">Поиск городов и координат</span>
+          <p>
+            В рамках комплекса также доступен поиск по базе данных адресов, как по названиям улиц и
+            городов, так и при помощи ввода координат. Для начала поиска необходимо ввести в
+            поисковой строке сначала название населенного пункта (например, "Винница"), затем
+            кликнуть по нужной строке, после чего откроется дополнительная поисковая строка для
+            ввода названия улиц.
+          </p>
+          <img src="./assets/search3.png" style="width: 35%; height: auto" />
+          <p>
+            После выбора города/улицы программа автоматически осуществит перелет к искомому объекту
+            и визуализирует его геометрию.
+          </p>
+          <img src="./assets/search2.png" style="width: 85%; height: auto" />
+          <p>
+            Для рестарта поиска необходимо воспользоваться кнопкой "Очистить поиск", расположенной в
+            правой части поисковой строки.
+          </p>
+          <img src="./assets/search1.png" style="width: 30%; height: auto" />
+        </div>
+        <div id="satellite-guide-contents" class="window-content">
+          <span class="headers">Каталог архива предприятия</span>
+          <p>
+            Для поиска спутниковых изображений можно воспользоваться фильтрами на вкладке "Снимки" в
+            левой навигационной панели, которые включают в себя область поиска, задание даты, выбор
+            космического аппарата, а также диапазон углов съемки.
+          </p>
+          <img src="./assets/satellite1.png" style="width: 85%; height: auto" />
+          <p>
+            По завершении настройки фильтров, необходимо нажать на кнопку "Поиск", чтобы открыть
+            меню с каталогом подходящих снимков. При наведении курсором на содержимое крайнего
+            левого столбца будет показано увеличенное изображение для предпросмотра. Также доступен
+            просмотр отображения спутникового снимка с привязкой к конкретным координатам.
+          </p>
+          <img src="./assets/satellite2.png" style="width: 85%; height: auto" />
+          <p>
+            Кроме того, в рамках геоинформационной платформы также возможен просмотр каталога продукции, хранящейся в
+            архиве предприятия: отбор данных, отображение районов на карте, вывод дополнительных данных о
+            комплекте. Отобранная продукция визуализируется в виде таблицы с несколькими вкладками.
+            Из таблицы можно добавить необходимую продукцию в корзину для оформления заказа из
+            архива.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
